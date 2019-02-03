@@ -6,6 +6,8 @@ client = discord.Client()
 key = os.environ['DISCORD_KEY']
 ebi_time = datetime.now() + relativedelta(hours=9)
 sango_time = ebi_time
+msg_desc = "さんご:" + sango_time.strftime('%Y/%m/%d %H:%M:%S')	 + "\n竹篭:" + ebi_time.strftime('%Y/%m/%d %H:%M:%S')	
+msg = discord.Embed(title='養殖場 次回採取時間', description=msg_desc, colour=0x3498db)
 
 @client.event
 async def on_ready():
@@ -21,8 +23,6 @@ async def on_message(message):
 	if message.content.startswith("switch"):
 		if client.user != message.author:
 			#msg = await client.send_message(message.channel, 'スイッチ')
-			msg_desc = "さんご:" + sango_time.strftime('%Y/%m/%d %H:%M:%S')	 + "\n竹篭:" + ebi_time.strftime('%Y/%m/%d %H:%M:%S')	
-			msg = discord.Embed(title='養殖場時間表', description=msg_desc, colour=0x3498db)
 			msg_rec = await client.send_message(message.channel, embed=msg)
 			await client.add_reaction(msg_rec, u"\U0001F48E")
 			await client.add_reaction(msg_rec, u"\U0001F990")
@@ -36,11 +36,19 @@ async def check_reaction(target_msg):
 	while True:
 		target_reaction = await client.wait_for_reaction(message=target_msg)
 		if target_reaction.user != target_msg.author:
+			global ebi_time
+			global sango_time
 			if target_reaction.reaction.emoji == u"\U0001F990":
+				ebi_time = datetime.now() + relativedelta(hours=5)
+				msg_desc = "さんご:" + sango_time.strftime('%Y/%m/%d %H:%M:%S')	 + "\n竹篭:" + ebi_time.strftime('%Y/%m/%d %H:%M:%S')	
 				await client.send_message(target_msg.channel, "エビ")
+				client.edit_message(msg, msg_desc) ##
 			
 			elif target_reaction.reaction.emoji == u"\U0001F48E":
+				sango_time = datetime.now() + relativedelta(hours=10)
+				msg_desc = "さんご:" + sango_time.strftime('%Y/%m/%d %H:%M:%S')	 + "\n竹篭:" + ebi_time.strftime('%Y/%m/%d %H:%M:%S')	
 				await client.send_message(target_msg.channel, "さんご")
+				client.edit_message(msg, msg_desc) ##
 			
 			else:
 				pass
