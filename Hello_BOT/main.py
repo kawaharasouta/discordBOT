@@ -1,8 +1,7 @@
 import discord
 import os
 client = discord.Client()
-#key = os.environ['DISCORD_KEY']
-key = 'NTQwNTU5NjUwNjY0NDgwNzkw.XqsRmw.16G07EhybTWLb4CTkHgnAqq5kuA'
+key = os.environ['DISCORD_KEY']
 
 @client.event
 async def on_ready():
