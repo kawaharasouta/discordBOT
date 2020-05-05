@@ -19,6 +19,7 @@ gc = gspread.authorize(credentials)
 wkb = gc.open('McP_Util Test')
 wks = wkb.sheet1
 raised_hand_sheet = wkb.worksheet('raised_hand')
+global Member
 
 @client.event
 async def on_ready():
@@ -28,13 +29,10 @@ async def on_ready():
     print("discord key")
     print(key)
     print('------')
+    Member = hand.Day_Member()
+    Member.Show_Day_Member()
     #loop.start()
 
-async def f_one_raised_hand(fsheet, fname, ftimes, fchannel):
-    print(fname)
-    print(ftimes)
-    m = "Hello " + fname + "!"
-    await fchannel.send(m)
 
 @client.event
 async def on_message(message):
