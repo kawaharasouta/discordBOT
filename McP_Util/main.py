@@ -4,6 +4,8 @@ import os
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
+import raised_hand as hand
+
 # discord info
 client = discord.Client()
 key = os.environ['DISCORD_KEY']
@@ -16,6 +18,7 @@ credentials = ServiceAccountCredentials.from_json_keyfile_name('mcp-util.json', 
 gc = gspread.authorize(credentials)
 wkb = gc.open('McP_Util Test')
 wks = wkb.sheet1
+raised_hand_sheet = wkb.worksheet('raised_hand')
 
 @client.event
 async def on_ready():
@@ -27,19 +30,25 @@ async def on_ready():
     print('------')
     #loop.start()
 
+async def f_one_raised_hand(fsheet, fname, ftimes, fchannel):
+    print(fname)
+    print(ftimes)
+    m = "Hello " + fname + "!"
+    await fchannel.send(m)
+
 @client.event
 async def on_message(message):
     if message.content.startswith("/can"):
         name = message.author.display_name
         times = message.content.split()
         times.pop(0)
-        print(name)
-        print(times)
-        m = "Hello " + message.author.name + "!"
         channel = client.get_channel(channel_id)
-        #wks.update_acell('A1', 'Hello World!')
-        await channel.send(m)
-        #await message.channel.send(m)
+        await hand.one_raised_hand(raised_hand_sheet, name, times, channel)
+        #print(name)
+        #print(times)
+        #m = "Hello " + message.author.name + "!"
+        ##wks.update_acell('A1', 'Hello World!')
+        #await channel.send(m)
 
 @tasks.loop(seconds=1)
 async def loop():
