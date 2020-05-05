@@ -2,6 +2,7 @@ import discord
 from discord.ext import tasks
 import os
 import gspread
+import datetime
 
 class Onetime_Member:
     time = 0
@@ -14,7 +15,6 @@ class Onetime_Member:
         for i in range(len(self.member)):
             ret = ret + self.member[i] + '\t'
         return ret
-        #return 'show_onetime_member'
 
 class Day_Member:
     times = []
@@ -22,10 +22,12 @@ class Day_Member:
         for i in range(20, 25):
             self.times.append(Onetime_Member(i))
     def Show_Day_Member(self):
-        print(len(self.times))
+        ret = str(datetime.date.today()) + '\n'
+        #print(len(self.times))
         for i in range(len(self.times)):
-            print(self.times[i].show_onetime_member())
-
+            #print(self.times[i].show_onetime_member())
+            ret += self.times[i].show_onetime_member() + '\n'
+        print(ret)
 
 
 async def one_raised_hand(sheet, name, times, channel):
