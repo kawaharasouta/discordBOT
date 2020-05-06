@@ -19,18 +19,29 @@ gc = gspread.authorize(credentials)
 wkb = gc.open('McP_Util Test')
 wks = wkb.sheet1
 raised_hand_sheet = wkb.worksheet('raised_hand')
-global Member
+
+Member = hand.Day_Member()
+channel = None
+
+async def usage():
+    m = '''
+        ***McP Util usage***
+        now under developed.
+    '''
+    await channel.send(m)
+    
+
 
 @client.event
 async def on_ready():
+    global channel
+    channel = client.get_channel(channel_id)
     print('Logged in as')
     print(client.user.name)
     print(client.user.id)
     print("discord key")
     print(key)
     print('------')
-    Member = hand.Day_Member()
-    Member.Show_Day_Member()
     #loop.start()
 
 
@@ -40,18 +51,28 @@ async def on_message(message):
         name = message.author.display_name
         times = message.content.split()
         times.pop(0)
-        channel = client.get_channel(channel_id)
-        await hand.one_raised_hand(raised_hand_sheet, name, times, channel)
-        #print(name)
-        #print(times)
-        #m = "Hello " + message.author.name + "!"
+        m = hand.one_raise_hand(Member, name, times)
+        if m != None:
+            await channel.send(m)
+        await channel.send(Member.Show_Day_Member())
         ##wks.update_acell('A1', 'Hello World!')
-        #await channel.send(m)
+    elif message.content.startswith("/not"):
+        name = message.author.display_name
+        times = message.content.split()
+        times.pop(0)
+        m = hand.one_lower_hand(Member, name, times)
+        if m != None:
+            await channel.send(m)
+        await channel.send(Member.Show_Day_Member())
+    elif message.content.startswith("/show"):
+        await channel.send(Member.Show_Day_Member())
+    elif message.content.startswith("/utilhelp"):
+        await usage()
+        
 
 @tasks.loop(seconds=1)
 async def loop():
     m = "Hello " + "!"
-    channel = client.get_channel(channel_id)
     await channel.send(m)
 
 def main():
