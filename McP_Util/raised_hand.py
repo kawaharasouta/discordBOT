@@ -10,7 +10,8 @@ class Onetime_Member:
         self.num_member = 0
         self.member = []
     def show_onetime_member(self):
-        ret = str(self.time) + '\t' + 'member:\t'
+        more = 6 - (self.num_member % 6)
+        ret = str(self.time) + '@' + str(more) + '\t' + 'member:\t'
         for i in range(self.num_member):
             ret = ret + self.member[i] + '\t'
         return ret
@@ -34,7 +35,7 @@ class Day_Member:
     def Show_Day_Member(self):
         ret = str(datetime.date.today()) + '\n'
         for i in range(len(self.times)):
-            ret += str(self.times[i].num_member) + '\t' + self.times[i].show_onetime_member() + '\n'
+            ret += self.times[i].show_onetime_member() + '\n'
         return ret
     def Add_Member(self, name, time):
         for i in range(len(self.times)):
@@ -50,6 +51,11 @@ class Day_Member:
                     self.times[i].del_member(name)
                 return
         return str(time)
+    def Add_Time(self, time):
+        for i in len(self.times):
+            if self.times[i].time == int(time)
+                return str(time)
+        self.times.append(Onetime_Member(time))
 
 def one_raise_hand(member, name, times):
     ret = []
@@ -76,4 +82,13 @@ def one_lower_hand(member, name, times):
     elif len(ret) > 1:
         m = ','.join(ret) + ' are not set.'
         return m
+
+def set_war(member, times):
+    ret = []
+    for i in range(len(times)):
+        r = member.Add_Time(name, times[i])
+        
+
+
+
 

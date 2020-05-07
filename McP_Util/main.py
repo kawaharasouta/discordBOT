@@ -36,13 +36,13 @@ async def usage():
 async def on_ready():
     global channel
     channel = client.get_channel(channel_id)
+    loop.start()
     print('Logged in as')
     print(client.user.name)
     print(client.user.id)
     print("discord key")
     print(key)
     print('------')
-    #loop.start()
 
 
 @client.event
@@ -64,13 +64,17 @@ async def on_message(message):
         if m != None:
             await channel.send(m)
         await channel.send(Member.Show_Day_Member())
+    elif message.content.startswith("/set"):
+        name = message.author.display_name
+        times = message.content.split()
+        times.pop(0)
     elif message.content.startswith("/show"):
         await channel.send(Member.Show_Day_Member())
     elif message.content.startswith("/utilhelp"):
         await usage()
         
 
-@tasks.loop(seconds=1)
+@tasks.loop(seconds=60)
 async def loop():
     m = "Hello " + "!"
     await channel.send(m)
@@ -80,3 +84,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
